@@ -1,9 +1,9 @@
 package com.skyapi.weatherforecast.location;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,6 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skyapi.weatherforecast.common.Location;
 
+import ch.qos.logback.core.joran.spi.HostClassAndPropertyDouble;
+
+//GREAT!!
 @WebMvcTest(LocationApiController.class)
 public class LocationApiControllerTests {
 	
@@ -135,6 +138,73 @@ public class LocationApiControllerTests {
 			.andDo(print());
 
 	}
+	
+	//OK 
+	//NO MOCK ON THE SERVICE!! request should not go through the controller!
+	@Test
+	void testGetShouldReturn405MethodNotAllowed() throws Exception
+	{
+		String requestURI = END_POINT_PATH + "/ABCDE";  
+		
+		mockMvc.perform(post(requestURI))
+		.andExpect(status().isMethodNotAllowed())
+		.andDo(print());
+		
+		
+		//CONFIGURE THE MOCK - TO RETURN NULL 
+		//Mockito.when(service.get(code)).thenReturn();
+
+	}
+	
+	
+	//OK
+	@Test
+	void testGetShouldReturn404NotFound() throws Exception
+	{
+		String requestURI = END_POINT_PATH + "/ABCDE";  
+		
+		mockMvc.perform(get(requestURI))
+		.andExpect(status().isNotFound())
+		.andDo(print());
+		
+		
+		//CONFIGURE THE MOCK - TO RETURN NULL 
+		//Mockito.when(service.get(code)).thenReturn();
+
+	}
+	
+	
+	@Test
+	void testGetShouldReturn200Ok() throws Exception
+	{
+		String code = "NYC_US";
+		String requestURI = END_POINT_PATH + "/" + code;
+		
+		Location location = new Location();
+		location.setCode("NYC_US");
+		location.setCityName("New York City");
+		location.setRegionName("New York");
+		location.setCountryCode("US");
+		location.setCountryName("United States of America");
+		location.setEnabled(true);
+		
+		
+		
+		//CONFIGURE THE MOCK - TO RETURN NULL 
+		Mockito.when(service.get(code)).thenReturn(location);
+		
+			this.mockMvc.perform(get(requestURI))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType("application/json"))
+					//VERIFY THE FIRST OBJECT IN THE ARRAY IN THE RESPONSE 
+					.andExpect(jsonPath("$.code", is(code)))
+					.andExpect(jsonPath("$.city_name", is("New York City")))
+					.andDo(print());
+			
+	}
+	
+	
+
 	
 	
 

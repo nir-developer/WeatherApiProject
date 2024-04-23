@@ -18,5 +18,11 @@ public interface LocationRepository extends CrudRepository<Location, String> {
 	//JPQL -> ADVANTAGE! IF SYNTAX ERROR THAN THE APP WILL BE CATCHED ON STARTUP !
 	@Query("SELECT l FROM Location l WHERE l.trashed=false")
 	List<Location> findUntrashed();
+	
+	
+	@Query("SELECT l FROM Location l WHERE l.trashed=false AND l.code= ?1")
+	public Location findByCode(String code);
 
 }
+
+

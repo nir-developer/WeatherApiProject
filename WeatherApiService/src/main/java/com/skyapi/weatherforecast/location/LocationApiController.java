@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,22 @@ public class LocationApiController {
 		return ResponseEntity.ok(locations);
 	}
 	
+	
+	@GetMapping("/{code}")
+	public ResponseEntity<?> getLocation(@PathVariable("code") String code)
+	{
+		
+		Location location = this.service.get(code);
+		
+		//DONT THROW!nothing is thrown..aslo not in the service
+		if(location == null)
+		{
+			return ResponseEntity.notFound().build(); 
+		}
+		
+		//found!
+		return ResponseEntity.ok(location);
+	}
 	
 	
 

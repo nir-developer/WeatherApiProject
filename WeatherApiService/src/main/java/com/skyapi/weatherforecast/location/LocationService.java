@@ -31,4 +31,9 @@ public class LocationService {
 		return this.repository.findUntrashed();
 	}
 	
+	public Location get(String code)
+	{
+		return this.repository.findByCode(code);
+	}
+	
 }

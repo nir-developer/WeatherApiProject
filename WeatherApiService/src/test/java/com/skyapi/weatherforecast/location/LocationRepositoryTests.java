@@ -25,23 +25,32 @@ public class LocationRepositoryTests {
 	private LocationRepository repository;
 	
 	
+////////////////////////////
+//1 CREATE LOCATION API  - DONE
+
+	//GREAT!
+	@Disabled
 	@DisplayName("create location success")
 	@Test
 	public void testAddSuccess() {
 		Location location = new Location();
-		location.setCode("PS_FR");
+		location.setCode("NYC_US");
 		location.setCityName("New York City");
 		//location.setRegionName("Dan");
-		location.setCountryCode("FR");
-		location.setCountryName("France");
+		location.setCountryCode("US");
+		location.setCountryName("United States of America");
 		location.setEnabled(true);
 		location.setTrashed(true);
 		
 		Location savedLocation = repository.save(location);
 		
 		assertThat(savedLocation).isNotNull();
-		assertThat(savedLocation.getCode()).isEqualTo("PS_FR");
+		assertThat(savedLocation.getCode()).isEqualTo("NYC_US");
 	}
+	
+////////////////////////////
+//2. List Locations API  -DONE
+
 	
 	//@Disabled
 	@DisplayName("List All Locations")
@@ -50,7 +59,7 @@ public class LocationRepositoryTests {
 	{
 		List<Location> locations = (List<Location>)this.repository.findAll();
 		
-		assertThat(locations.size()).isEqualTo(4); 
+		assertThat(locations.size()).isEqualTo(2); 
 		//locations.forEach(l -> System.out.println(l));
 		locations.forEach(l -> System.out.println(l));
 	}
@@ -64,6 +73,48 @@ public class LocationRepositoryTests {
 		assertThat(nonTrashedLocatoins.size()).isEqualTo(3); 
 		
 		nonTrashedLocatoins.forEach(l -> System.out.println(l));
+	}
+	
+	
+	////////////////////////////
+	//3. FIND LOCATION API 
+	
+	//OK!  CHECK BOTH FIELDS! OK!
+	//		l1_0.trashed=0 
+    //		and l1_0.code=?
+	@Test
+	void testGetNotFound()
+	{
+		String code = "ABCD"; 
+		Location location = repository.findByCode(code);
+		
+		assertThat(location).isNull();
+		
+		System.out.println(location);
+		
+	}
+	
+	//OK!
+	@Test
+	void testGetFound()
+	{
+		String code = "NYC_US"; 
+		Location location = repository.findByCode(code);
+		
+		assertThat(location).isNotNull();
+		
+		System.out.println(location);
+	}
+	
+	@Test
+	void testGetFoundWhenTrashedStatusIsTrueShouldReturnNull()
+	{
+		String code = "PS_FR"; 
+		Location location = repository.findByCode(code);
+		
+		assertThat(location).isNull();
+		
+		System.out.println(location);
 	}
 
 }
