@@ -3,6 +3,7 @@ package com.skyapi.weatherforecast.location;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,6 +91,24 @@ public class LocationApiController {
 		catch(Exception ex)
 		{
 			return ResponseEntity.notFound().build(); 
+		}
+	}
+	
+	//WHY GET???
+	@DeleteMapping("/{code}")
+	public ResponseEntity<?> deleteLocation(@PathVariable("code") String code)
+	{
+		try
+		{
+			this.service.delete(code);
+			
+			return ResponseEntity.noContent().build();
+			
+		}
+		catch(LocationNotFoundException exc)
+		{
+			return ResponseEntity.notFound().build(); 
+
 		}
 	}
 

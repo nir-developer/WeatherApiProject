@@ -116,5 +116,23 @@ public class LocationRepositoryTests {
 		
 		System.out.println(location);
 	}
+	
+	////////////////
+	//DELET API 
+	
+	@Test
+	void testTrashByCodeSuccess()
+	{
+		String code = "NYC_USA"; 
+		
+		//WHEN
+		this.repository.trashByCode(code);
+		
+		Location deletedLocation = this.repository.findByCode(code);
+		
+		assertThat(deletedLocation).isNull();
+		
+		System.out.println(deletedLocation); 
+	}
 
 }

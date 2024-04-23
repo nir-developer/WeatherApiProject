@@ -59,4 +59,22 @@ public class LocationService {
 		
 	}
 	
+	public void delete(String code) throws LocationNotFoundException
+	{
+
+//		//USE JPA - isExistsById
+//		if(this.repository.existsById(code)) throw new LocationNotFoundException("Can not delete"); 
+//		
+		
+		//FIND AN EXISTING LOCATION WITH THE GIVEN CODE AND  WITH TRAHSED = FALSE 
+		Location location = this.repository.findByCode(code);
+		
+		if(location == null) throw new LocationNotFoundException("No location found with the given code:" + code); 
+		//PERFORM THE UPDATE ! location found in db 
+		
+		
+		this.repository.trashByCode(code);
+		
+	}
+	
 }
