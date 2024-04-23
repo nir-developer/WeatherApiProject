@@ -1,0 +1,17 @@
+[33mcommit 508424a5d193a99aff4eb72f7d1263b813191b73[m[33m ([m[1;36mHEAD -> [m[1;32mdev-ubuntu[m[33m, [m[1;31morigin/dev-ubuntu[m[33m, [m[1;32mmain[m[33m)[m
+Author: nir-developer <nir100.developer@gmail.com>
+Date:   Tue Apr 23 15:03:59 2024 +0300
+
+    56:Implement Get Location API
+
+[33mcommit 9d1b6970aba85d11edac6937803e6279d76af04d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/dev-mac[m[33m)[m
+Author: nir-developer <nir100.developer@gmail.com>
+Date:   Mon Apr 22 07:36:20 2024 +0300
+
+    55-IMPLEMENT LIST LOCATIONS API
+
+[33mcommit 15a76f98fc4e7d3a6abc8b0e408c3f780cae03a1[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: nir-developer <nir100.developer@gmail.com>
+Date:   Sat Apr 20 21:09:47 2024 +0300
+
+    project setup (multi-module maven project; initial dependencies)

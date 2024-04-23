@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -203,8 +204,92 @@ public class LocationApiControllerTests {
 			
 	}
 	
-	
+	/////////////////////
+	//UPDATE API 
+	@Test
+	void testUpdateLocationShouldReturn404NotFound() throws Exception
+	{
+		String code = "ABCDE"; 
+		
+		Location location = new Location();
+		location.setCode("NYC_USA");
+		location.setCityName("New York City");
+		location.setRegionName("New York");
+		location.setCountryCode("US");
+		location.setCountryName("United States of America");
+		location.setEnabled(true);
+		
+		
+		//CONFIGURE THE MOCK TO THROW
+		Mockito.when(this.service.update(location)).thenThrow(new LocationNotFoundException("No Location Found|")); 
+		
+		
+		String bodyContent = this.mapper.writeValueAsString(location);
+		
+		mockMvc.perform(put(END_POINT_PATH).contentType("application/json").content(bodyContent))
+			.andExpect(status().isNotFound())
+			.andDo(print());
+		
+		
+	}
 
+		
+
+	//NO NEED TO CONFIGURE THE MOCK - SINCE SHOULD NOT GET THROUGH THE CONTROLLER
+	@Test
+	void testUpdateLocationShouldReturn400BadRequest() throws Exception
+	{
+	
+	//INVALID LOCATION -WITHOUT A LOCATION CODE WHICH IS REQUIRED!
+	Location location = new Location();
+	//location.setCode("NYC_USA");
+	location.setCityName("New York City");
+	location.setRegionName("New York");
+	location.setCountryCode("US");
+	location.setCountryName("United States of America");
+	location.setEnabled(true);
+	
+	
+	String bodyContent = this.mapper.writeValueAsString(location);
+	
+	mockMvc.perform(put(END_POINT_PATH).contentType("application/json").content(bodyContent))
+	.andExpect(status().isBadRequest())
+	.andDo(print());
+
+	}
+	
+	@Test
+	public void testUpdateShouldReturn200Ok() throws Exception
+	{
+		//VALID LOCATION 
+		Location location = new Location();
+		location.setCode("NYC_USA");
+		location.setCityName("New York City");
+		//location.setRegionName("Dan");
+		location.setCountryCode("US");
+		location.setCountryName("United States of America");
+		location.setEnabled(true);
+		
+		
+		//CONFIGURE THE MOCK
+		Mockito.when(service.add(location)).thenReturn(location); 
+		
+		String bodyContent = this.mapper.writeValueAsString(location);
+		
+		this.mockMvc.perform(post(END_POINT_PATH).contentType("application/json").content(bodyContent))
+				.andExpect(status().isCreated())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(jsonPath("$.code", is("NYC_USA")))
+				.andExpect(jsonPath("$.city_name", is("New York City")))
+
+				.andDo(print());
+		
+
+			
+	}
+	
+		
+	
 	
 	
 

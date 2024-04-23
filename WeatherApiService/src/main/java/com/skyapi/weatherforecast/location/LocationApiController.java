@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,5 +76,21 @@ public class LocationApiController {
 	}
 	
 	
+	@PutMapping
+	public ResponseEntity<?> updateLocation(@RequestBody @Valid Location location)
+	{
+		//TRY - CATCH SINCE THE SERVICE MAY THROW 
+		try 
+		{
+			Location updatedLocation = this.service.update(location);
+			
+			//SUCCESS IF REACHED HERE -THEN RETURN  THE RESPOSNE WITH THE UPDATED LOCATION IN THE BODY
+			return ResponseEntity.ok(updatedLocation);
+		}
+		catch(Exception ex)
+		{
+			return ResponseEntity.notFound().build(); 
+		}
+	}
 
 }

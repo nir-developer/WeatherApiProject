@@ -36,4 +36,27 @@ public class LocationService {
 		return this.repository.findByCode(code);
 	}
 	
+	public Location update(Location location) throws LocationNotFoundException
+	{
+		String code = location.getCode(); 
+		
+		Location locationInDB = this.repository.findByCode(code);
+		
+		if(locationInDB == null)
+		{
+			throw new LocationNotFoundException("No location found with the given code: " + code);
+		}
+		
+		//Update  - all fields other than trashed and code 
+		locationInDB.setCityName(location.getCityName());
+		locationInDB.setRegionName(location.getRegionName());
+		locationInDB.setCountryName(location.getCountryName());
+		locationInDB.setCountryCode(location.getCountryCode());
+		locationInDB.setEnabled(location.isEnabled());
+		
+		
+		return this.repository.save(location);
+		
+	}
+	
 }
